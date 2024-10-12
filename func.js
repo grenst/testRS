@@ -10,20 +10,22 @@ const text = 'it works!';
 truncate(text, 4); // it w...
 
 */
-const getNumberExplanation = (value) => {
-    switch (value ) {
-        case 666 :
-            return 'devil number';
-        case 42 :
-            return 'answer for everything';
-        case 7 :
-            return 'prime number';
-        default :
-            return 'just a number';
+
+// const str = 'If I look back I am lost';
+
+const encrypt = (word) => {
+    let result = '';
+    for (let i = 0; i < word.length; i++) {
+        if ((i + 1) % 2 === 0) {
+            result = `${result}${word[i]}${word[i -1]}`
+        };
     };
+    return word.length % 2 === 0 ? result : result + word[word.length - 1];
 };
 
-console.log(getNumberExplanation(8)) // You win!
-console.log(getNumberExplanation(666)) // Try again!
-console.log(getNumberExplanation(42)) // Try again!
-console.log(getNumberExplanation(7)) // Try again!
+
+console.log(encrypt('move')); // omev
+console.log(encrypt('attack')); // taatkc
+// Если длина строки нечётное
+// то последний символ остается на своем месте
+console.log(encrypt('go!')); // og!
