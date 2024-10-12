@@ -1,1 +1,0 @@
-const addings = (a, b) => a + b;
