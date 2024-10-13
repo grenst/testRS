@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const backButton = document.getElementById('backButton');
     const videoSource = document.getElementById('videoSource');
     const videoPlayer = document.getElementById('videoPlayer');
+    const backgroundVideo = document.getElementById('backgroundVideo'); // Фоновое видео
     
     // Элементы превью видео
     const videoOption1 = document.getElementById('videoOption1');
@@ -37,14 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayerScreen.style.display = 'none';
         videoSelectionScreen.style.display = 'flex';
         videoPlayer.pause();  // Авто STOP
+        backgroundVideo.pause(); // Останавливаем фоновое видео
+        backgroundVideo.src = ''; // Сбросить источник фона
+        document.body.style.backgroundColor = '#000'; // Устанавливаем дефолтный темный фон
         if (document.exitFullscreen) {
             document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
         }
     });
 
@@ -56,7 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
         videoPlayerScreen.style.display = 'block';
         videoPlayer.play();  // Автоматически начать воспроизведение после выбора видео
         
-        playPauseOverlay.classList.remove('visible');  // Автоматически видuM
+        // Устанавливаем и запускаем фоновое видео
+        const backgroundVideo = document.getElementById('backgroundVideo');
+        backgroundVideo.src = src;
+        backgroundVideo.load();
+        backgroundVideo.play();
+        backgroundVideo.muted = true; // Фоновое видео без звука
+    
+        playPauseOverlay.classList.remove('visible');
         isVideoStarted = true;
         showControls();
     }
@@ -74,10 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function togglePlayPause() {
         if (videoPlayer.paused) {
             videoPlayer.play();
+            backgroundVideo.play(); // Синхронизируем запуск фона
             playPauseBtn.innerHTML = '<img src="assets/icons/pause_icon.svg" alt="" class="icon">';
             playPauseOverlay.classList.remove('visible');
         } else {
             videoPlayer.pause();
+            backgroundVideo.pause(); // Синхронизируем паузу фона
             playPauseBtn.textContent = '▶';
             playPauseOverlay.classList.add('visible');
         }
