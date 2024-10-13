@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Video Player RS School</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Экран выбора видео -->
+    <div id="videoSelectionScreen" class="selection-screen">
+        <div class="video-option" id="videoOption1">
+            <img src="assets/img/video1.jpg" alt="Превью 1">
+            <p>Видео 1</p>
+        </div>
+        <div class="video-option" id="videoOption2">
+            <img src="assets/img/video1.jpg" alt="Превью 2">
+            <p>Видео 2</p>
+        </div>
+    </div>
+
+    <!-- Экран проигрывателя -->
+    <div id="videoPlayerScreen" class="main-border" style="display: none;">
+        <button id="backButton" class="control-btn">Вернуться</button>
+        <div class="video-container">
+            <div class="video-wrapper">
+                <video id="videoPlayer">
+                    <source id="videoSource" src="" type="video/mp4">
+                </video>
+                <div id="playPauseOverlay" class="play-pause-overlay">
+                    <span>▶</span>
+                </div>
+                <div class="controls">
+                    <button id="playPauseBtn" class="control-btn">
+                        <img src="assets/icons/pause_icon.svg" alt="" class="icon">
+                    </button>
+                    <div class="progress">
+                        <input type="range" id="progressBar" min="0" max="100" value="0">
+                    </div>
+                    <div class="volume">
+                        <input type="range" id="volumeBar" min="0" max="100" value="40">
+                    </div>
+                    <button id="muteBtn" class="control-btn">🔊</button>
+                    <button id="fullscreenBtn" class="control-btn">⛶</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="javascript.js"></script>
+</body>
+</html>

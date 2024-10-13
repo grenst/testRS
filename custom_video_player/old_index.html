@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кастомный видеоплеер</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="video-container">
+        <div class="video-wrapper">
+            <img id="videoThumbnail" src="assets/images/video1.png" alt="Превью видео">
+            <video id="videoPlayer">
+                <source src="assets/video/video.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео тег.
+            </video>
+            <div id="playPauseOverlay" class="play-pause-overlay">
+                <span>▶</span>
+            </div>
+            <div class="controls">
+                <button id="playPauseBtn" class="control-btn">▶</button>
+                <div class="progress">
+                    <input type="range" id="progressBar" min="0" max="100" value="0">
+                </div>
+                <div class="volume">
+                    <input type="range" id="volumeBar" min="0" max="100" value="40">
+                </div>
+                <button id="muteBtn" class="control-btn">🔊</button>
+                <button id="fullscreenBtn" class="control-btn">⛶</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const videoContainer = document.querySelector('.video-container');
+        const videoWrapper = document.querySelector('.video-wrapper');
+        const videoThumbnail = document.getElementById('videoThumbnail');
+        const video = document.getElementById('videoPlayer');
+        const controls = document.querySelector('.controls');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playPauseOverlay = document.getElementById('playPauseOverlay');
+        const progressBar = document.getElementById('progressBar');
+        const volumeBar = document.getElementById('volumeBar');
+        const muteBtn = document.getElementById('muteBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+        let isVideoStarted = false;
+
+        videoThumbnail.addEventListener('click', startVideo);
+        video.addEventListener('click', togglePlayPause);
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        playPauseOverlay.addEventListener('click', togglePlayPause);
+        progressBar.addEventListener('input', setVideoProgress);
+        volumeBar.addEventListener('input', setVolume);
+        muteBtn.addEventListener('click', toggleMute);
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        video.addEventListener('timeupdate', updateProgressBar);
+
+        videoWrapper.addEventListener('mouseenter', showControls);
+        videoWrapper.addEventListener('mouseleave', hideControls);
+
+        function startVideo() {
+            videoThumbnail.style.display = 'none';
+            video.style.display = 'block';
+            video.play();
+            playPauseBtn.textContent = '⏸';
+            isVideoStarted = true;
+            showControls();
+        }
+
+        function togglePlayPause() {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = '⏸';
+                playPauseOverlay.classList.remove('visible');
+            } else {
+                video.pause();
+                playPauseBtn.textContent = '▶';
+                playPauseOverlay.classList.add('visible');
+            }
+        }
+
+        function setVideoProgress() {
+            video.currentTime = (progressBar.value / 100) * video.duration;
+        }
+
+        function updateProgressBar() {
+            progressBar.value = (video.currentTime / video.duration) * 100;
+        }
+
+        function setVolume() {
+            video.volume = volumeBar.value / 100;
+            updateVolumeIcon();
+        }
+
+        function toggleMute() {
+            video.muted = !video.muted;
+            updateVolumeIcon();
+        }
+
+        function updateVolumeIcon() {
+            if (video.muted || video.volume === 0) {
+                muteBtn.textContent = '🔇';
+            } else if (video.volume < 0.5) {
+                muteBtn.textContent = '🔉';
+            } else {
+                muteBtn.textContent = '🔊';
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                if (videoContainer.requestFullscreen) {
+                    videoContainer.requestFullscreen();
+                } else if (videoContainer.mozRequestFullScreen) {
+                    videoContainer.mozRequestFullScreen();
+                } else if (videoContainer.webkitRequestFullscreen) {
+                    videoContainer.webkitRequestFullscreen();
+                } else if (videoContainer.msRequestFullscreen) {
+                    videoContainer.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        function showControls() {
+            if (isVideoStarted) {
+                controls.classList.add('visible');
+            }
+        }
+
+        function hideControls() {
+            if (isVideoStarted) {
+                controls.classList.remove('visible');
+            }
+        }
+
+        // Initialisation ||||=====++
+        video.volume = 0.4;
+        controls.classList.remove('visible');
+        video.style.display = 'none';
+    </script>
+</body>
+</html>
